@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <h1>Welcome to Home Page</h1><br><br>
+        <p>To logout: wait 10 seconds or click below</p>
+        <form action="/logout" method = "POST">
+            <input type="submit" value="Logout"/>
+        </form>
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script>
+        var inactivityTime = 0;
+        var logoutTime = 10; // in seconds
+    
+        // Increment inactivityTime every second
+        var inactivityInterval = setInterval(function () {
+            inactivityTime++;
+            console.log(inactivityTime);
+            if (inactivityTime >= logoutTime) {
+                // Call a function to logout (e.g., redirect to a logout page)
+                logout();
+            }
+        }, 1000);
+    
+        // Reset inactivityTime on user activity
+        $(document).on('mousemove keydown click', function () {
+            inactivityTime = 0;
+        });
+    
+        function logout() {
+        // Send a POST request to the server
+            $.ajax({
+                type: 'POST',
+                url: "http://localhost:3000/logout",
+                data: {},
+                success: function (response) {
+                // Handle the server response if needed
+                    console.log('Logout successful');
+                    window.location.reload();
+                },
+                error: function (error) {
+                // Handle errors
+                    console.error('Logout error:', error);
+                }
+            });
+            clearInterval(inactivityInterval);
+        }
+    </script>
+    </body>
+</html>
